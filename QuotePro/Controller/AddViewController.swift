@@ -14,10 +14,22 @@ class AddViewController: UIViewController {
     @IBOutlet weak var quoteLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
     
-    
+    var quote: Quote! {
+        didSet {
+            DispatchQueue.main.async() {
+                self.quoteLabel.text = self.quote.quote
+                self.authorLabel.text = self.quote.author
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        QuoteAPI.fetchQuoteRequest { (dict: [String: Any]) in
+            guard let quote = Quote(dict: dict) else { return }
+            self.quote = quote
+        }
         
         ImageAPI.fetchImageRequest { image in
             
@@ -25,17 +37,6 @@ class AddViewController: UIViewController {
                 self.imageView.image = image
             }
         }
-    
-        
-        QuoteAPI.fetchQuoteRequest { dict in
-            let quote = Quote(dict: dict)
-            
-            DispatchQueue.main.async() {
-                self.quoteLabel.text = quote?.quote
-                self.authorLabel.text = quote?.author
-            }
-        }
-        
 
     }
     
@@ -45,12 +46,8 @@ class AddViewController: UIViewController {
     
     @IBAction func quoteBtnPressed(_ sender: UIButton) {
         QuoteAPI.fetchQuoteRequest { (dict: [String: Any]) in
-            let quote = Quote(dict: dict)
-            
-            DispatchQueue.main.async() {
-                self.quoteLabel.text = quote?.quote
-                self.authorLabel.text = quote?.author
-            }
+            guard let quote = Quote(dict: dict) else { return }
+            self.quote = quote
         }
     }
     

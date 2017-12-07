@@ -22,7 +22,6 @@ class QuoteAPI {
                         return
                 }
                 
-                
                 completion(json)
                 
             }

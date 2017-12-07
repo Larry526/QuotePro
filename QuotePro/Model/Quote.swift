@@ -14,7 +14,7 @@ class Quote: NSObject {
     var author: String!
     var image: UIImage?
     
-    init(quote : String, author: String, image: UIImage? = nil ) {
+    init(quote : String?, author: String?, image: UIImage? = nil ) {
         self.quote = quote
         self.author = author
         self.image = image
